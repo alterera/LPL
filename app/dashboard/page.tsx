@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { UserPlus, CheckCircle2, XCircle, Calendar, Phone, MapPin, CreditCard } from 'lucide-react';
 import Image from 'next/image';
+import { toast } from 'sonner';
 
 interface PlayerData {
   id: string;
@@ -31,14 +32,11 @@ interface PlayerData {
   transactionId?: string;
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [player, setPlayer] = useState<PlayerData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchPlayerData();
-  }, []);
 
   const fetchPlayerData = async () => {
     try {
@@ -53,6 +51,34 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPlayerData();
+  }, []);
+
+  useEffect(() => {
+    // Check for payment status in URL params
+    const paymentStatus = searchParams.get('payment');
+    const message = searchParams.get('message');
+
+    if (paymentStatus) {
+      // Remove query params from URL
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+
+      if (paymentStatus === 'success') {
+        toast.success('Payment successful! Your registration is now complete.');
+        // Refresh player data to get updated payment status
+        fetchPlayerData();
+      } else if (paymentStatus === 'failed') {
+        toast.error(message || 'Payment failed. Please try again.');
+      } else if (paymentStatus === 'pending') {
+        toast.info(message || 'Payment is pending. Please check back later.');
+      } else if (paymentStatus === 'error') {
+        toast.error(message || 'An error occurred during payment.');
+      }
+    }
+  }, [searchParams]);
 
   if (loading) {
     return (
@@ -237,5 +263,20 @@ export default function DashboardPage() {
 
 function Label({ children, className }: { children: React.ReactNode; className?: string }) {
   return <label className={className}>{children}</label>;
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
+  );
 }
 

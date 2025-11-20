@@ -174,34 +174,32 @@ export default function RegisterPage() {
   };
 
   const handlePayment = async () => {
+    if (!termsAccepted) {
+      toast.error('Please accept the Terms and Conditions to proceed');
+      return;
+    }
+
     setLoading(true);
     try {
-      // Get player ID
-      const playerResponse = await fetch('/api/players/me');
-      const playerData = await playerResponse.json();
-
-      if (!playerData.player) {
-        toast.error('Player not found');
-        return;
-      }
-
-      const paymentResponse = await fetch('/api/players/payment', {
+      // Create payment order
+      const paymentResponse = await fetch('/api/payments/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId: playerData.player.id }),
       });
 
       const paymentData = await paymentResponse.json();
 
-      if (paymentResponse.ok) {
-        toast.success('Payment successful! Registration complete.');
-        router.push('/dashboard');
+      if (paymentResponse.ok && paymentData.payment?.paymentUrl) {
+        toast.success('Redirecting to payment gateway...');
+        // Redirect to payment gateway
+        window.location.href = paymentData.payment.paymentUrl;
       } else {
-        toast.error(paymentData.error || 'Payment failed');
+        toast.error(paymentData.error || 'Failed to create payment order');
+        setLoading(false);
       }
     } catch (error) {
+      console.error('Payment error:', error);
       toast.error('An error occurred. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
