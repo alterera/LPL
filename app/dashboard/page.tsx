@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
   if (!player) {
     return (
-      <div className="px-4 py-12">
+      <div className="px-4 py-12 min-h-[80vh] pt-40 bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-2xl mx-auto">
           <Card>
             <CardContent className="pt-6">
@@ -91,8 +91,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-12">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-[80vh] bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-12 pt-30">
+      <div className="max-w-6xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h1>
           <p className="text-gray-600 dark:text-gray-400">Welcome back, {player.playerName}!</p>

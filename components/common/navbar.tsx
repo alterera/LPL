@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/logo';
 import { NavMenu } from '@/components/nav-menu';
 import { NavigationSheet } from '@/components/navigation-sheet';
 import {
@@ -28,25 +27,6 @@ const Navbar = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  // Refresh auth state when pathname changes (e.g., after login)
-  useEffect(() => {
-    checkAuth();
-  }, [pathname]);
-
-  // Listen for custom auth events (e.g., after login)
-  useEffect(() => {
-    const handleAuthChange = () => {
-      checkAuth();
-    };
-
-    window.addEventListener('auth-change', handleAuthChange);
-    return () => window.removeEventListener('auth-change', handleAuthChange);
-  }, []);
-
   const checkAuth = async () => {
     try {
       const response = await fetch('/api/auth/me');
@@ -64,11 +44,27 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    checkAuth();
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+
+    window.addEventListener('auth-change', handleAuthChange);
+    return () => window.removeEventListener('auth-change', handleAuthChange);
+  }, []);
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setUser(null);
-      // Dispatch event to update other components
       window.dispatchEvent(new Event('auth-change'));
       router.push('/login');
       router.refresh();
@@ -85,13 +81,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-6 inset-x-4 h-16 bg-background border max-w-(--breakpoint-xl) mx-auto rounded-full z-50">
+    <nav className="fixed top-6 inset-x-4 h-16 bg-background border max-w-6xl mx-auto rounded-full z-50">
       <div className="h-full flex items-center justify-between mx-auto px-4">
         <Link href="/">
-          <Image src={'/logo.png'} height={50} width={50} alt='logo' />
+          <Image src="/logo.png" height={50} width={50} alt="logo" />
         </Link>
 
-        {/* Desktop Menu */}
         <NavMenu className="hidden md:block" user={user} />
 
         <div className="flex items-center gap-3">
@@ -99,7 +94,6 @@ const Navbar = () => {
             <div className="h-9 w-20 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-full" />
           ) : user ? (
             <>
-              {/* User Dropdown */}
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -150,7 +144,6 @@ const Navbar = () => {
                 </PopoverContent>
               </Popover>
 
-              {/* Mobile Menu */}
               <div className="md:hidden">
                 <NavigationSheet user={user} />
               </div>
@@ -172,7 +165,6 @@ const Navbar = () => {
                 <Link href="/register">Get Started</Link>
               </Button>
 
-              {/* Mobile Menu */}
               <div className="md:hidden">
                 <NavigationSheet user={user} />
               </div>

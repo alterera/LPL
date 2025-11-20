@@ -474,7 +474,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-12">
+    <div className="min-h-[80vh] px-4 py-12 pt-30">
       <div className="max-w-3xl mx-auto">
         <Card>
           <CardHeader>

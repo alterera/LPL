@@ -4,7 +4,7 @@ import { UserModel } from '@/lib/models/User';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication and admin role
@@ -26,7 +26,7 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Prevent deleting own account
     if (id === payload.userId) {

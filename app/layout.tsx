@@ -2,7 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/common/navbar";
 import Footer from "@/components/common/Footer";
 import { Toaster } from "@/components/ui/sonner";
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoader from "nextjs-toploader";
 
 export default function RootLayout({
   children,
@@ -29,10 +29,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="font-custom antialiased">
+        <NextTopLoader color="#FF0000" />
         <Navbar />
-        <main className="pt-24">
-        <NextTopLoader color="#FF0000"/>
-          {children}</main>
+        <main className="">
+          {children}
+        </main>
         <Footer />
         <Toaster />
       </body>

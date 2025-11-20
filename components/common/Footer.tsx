@@ -11,6 +11,41 @@ import {
   MapPin,
 } from "lucide-react";
 
+const primaryLinks = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/#about" },
+  { name: "Why LPL", href: "/#why-us" },
+  { name: "Gallery", href: "/#gallery" },
+];
+
+const supportLinks = [
+  { name: "Register", href: "/register" },
+  { name: "Fixtures", href: "/#schedule" },
+  { name: "Contact", href: "/contact" },
+  { name: "Code of conduct", href: "/docs/code-of-conduct.pdf" },
+];
+
+const contactDetails = [
+  {
+    type: "Email",
+    value: "info@laharighatpremierleague.in",
+    href: "mailto:info@laharighatpremierleague.in",
+    icon: Mail,
+  },
+  {
+    type: "Phone",
+    value: "+91 91017 95134",
+    href: "tel:+919101795134",
+    icon: Phone,
+  },
+  {
+    type: "Address",
+    value: "Block Stadium, Laharighat, Assam 782127",
+    href: "https://maps.google.com/?q=Laharighat+Block+Stadium",
+    icon: MapPin,
+  },
+];
+
 const socialLinks = [
   { name: "Facebook", href: "https://facebook.com", icon: Facebook },
   { name: "Twitter", href: "https://twitter.com", icon: Twitter },
@@ -18,180 +53,145 @@ const socialLinks = [
   { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
 ];
 
-const footerMenuColumn1 = [
-  { name: "Home", href: "/" },
-  { name: "Register", href: "/register" },
-  { name: "About Us", href: "#" },
-  { name: "Contact Us", href: "/contact" },
-];
-
-const contactDetails = [
-  {
-    type: "Email",
-    value: "info@balidungacricketclub.com",
-    href: "mailto:info@balidungacricketclub.com",
-    icon: Mail,
-  },
-  {
-    type: "Phone",
-    value: "+91 7002808282",
-    href: "tel:+917002808282",
-    icon: Phone,
-  },
-  {
-    type: "Address",
-    value: "HAB Industry, Balidunga, Assam 782127, India",
-    href: "https://maps.google.com/?q=Balidunga+Assam+India",
-    icon: MapPin,
-  },
-];
-
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-green-900/10"></div>
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-green-500"></div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
-          {/* Logo and Description */}
-          <div className="lg:col-span-1 space-y-6">
-            <Link href="/" className="inline-block group">
-              <Image
-                src="/logo.png"
-                alt="Laharighat Premier League"
-                width={120}
-                height={50}
-              />
-            </Link>
-
-            <div className="space-y-3">
-              <h3 className="text-white font-semibold text-lg flex items-center gap-2">
-                Laharighat Premier League
-              </h3>
-              <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-                Bringing cricket excellence to Assam. Join us for thrilling
-                matches, community spirit, and unforgettable sporting moments.
+    <footer className="text-slate-900">
+      <div className="">
+        <div className="bg-linear-to-br from-[#FCF8F1] via-white to-[#FFE8C7]/80 p-10 shadow-lg shadow-amber-100/50">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="space-y-6">
+              <Link href="/" className="inline-flex items-center gap-3">
+                <Image
+                  src="/logo.png"
+                  alt="Laharighat Premier League"
+                  width={56}
+                  height={56}
+                  className="rounded-2xl bg-white p-2 shadow"
+                />
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-amber-600">
+                    LPL 2025
+                  </p>
+                  <h3 className="text-xl font-semibold">
+                    Laharighat Premier League
+                  </h3>
+                </div>
+              </Link>
+              <p className="text-base text-slate-600">
+                A modern tournament experience for Assam’s cricket community.
+                Register teams, follow fixtures, and celebrate every match with
+    dedicated coverage.
               </p>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-6">
-            <h3 className="text-white font-semibold text-lg border-b border-gray-700 pb-2">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
-              {footerMenuColumn1.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Information */}
-          <div className="space-y-6">
-            <h3 className="text-white font-semibold text-lg border-b border-gray-700 pb-2">
-              Get in Touch
-            </h3>
-
-            <div className="space-y-4">
-              {contactDetails.map((contact, index) => {
-                const IconComponent = contact.icon;
-                return (
-                  <div key={index} className="group">
-                    <a
-                      href={contact.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200 text-sm flex items-start gap-3"
-                      target={contact.type === "Address" ? "_blank" : undefined}
-                      rel={
-                        contact.type === "Address"
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                    >
-                      <IconComponent className="w-4 h-4 mt-0.5 text-blue-400 group-hover:text-blue-300 transition-colors flex-shrink-0" />
-                      <span className="leading-relaxed">{contact.value}</span>
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Social Media Icons */}
-            <div className="pt-4">
-              <h4 className="text-white font-medium mb-3 text-sm">Follow Us</h4>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {socialLinks.map((social) => {
-                  const IconComponent = social.icon;
+                  const Icon = social.icon;
                   return (
                     <a
                       key={social.name}
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={social.name}
-                      className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300 hover:scale-110 hover:rotate-3"
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-amber-300 hover:text-amber-600"
                     >
-                      <IconComponent className="w-4 h-4" />
+                      <Icon className="h-4 w-4" />
                     </a>
                   );
                 })}
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-slate-800/50 pt-8">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-            {/* Left side - Copyright */}
-            <div className="flex items-center gap-2 text-slate-400 text-sm">
-              <div className="flex items-center gap-2">
-                
-                <span>
-                  &copy; {new Date().getFullYear()} Laharighat Premier League
-                </span>
+            <div className="grid gap-8 sm:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
+                  Navigate
+                </p>
+                <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                  {primaryLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-2 hover:text-slate-900"
+                      >
+                        <span className="h-1 w-1 rounded-full bg-amber-500" />
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
+                  Support
+                </p>
+                <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                  {supportLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-2 hover:text-slate-900"
+                      >
+                        <span className="h-1 w-1 rounded-full bg-amber-500" />
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="sm:col-span-2">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
+                  Contact
+                </p>
+                <div className="mt-4 space-y-4">
+                  {contactDetails.map((contact) => {
+                    const Icon = contact.icon;
+                    return (
+                      <a
+                        key={contact.type}
+                        href={contact.href}
+                        target={contact.type === "Address" ? "_blank" : undefined}
+                        rel={
+                          contact.type === "Address"
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/70 p-4 text-sm text-slate-600 shadow-sm transition hover:border-amber-200"
+                      >
+                        <Icon className="mt-1 h-4 w-4 text-amber-600" />
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-slate-400">
+                            {contact.type}
+                          </p>
+                          <p className="mt-1 font-medium text-slate-900">
+                            {contact.value}
+                          </p>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            
-
-            {/* Right side - Developer credit */}
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-slate-500">Developed by</span>
-              <a
-                href="https://alterera.net"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-              >
-                
-                <span className="text-blue-400 hover:text-white hover:underline font-medium transition-colors">
-                  Alterera Networks
-                </span>
-              </a>
-            </div>
           </div>
 
-          {/* Additional info bar */}
-          <div className="mt-6 pt-4 border-t border-slate-800/30">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-              <div className="flex items-center gap-4">
-                <span>Privacy Policy</span>
-                <span>•</span>
-                <span>Terms of Service</span>
-                <span>•</span>
-                <span>Cookie Policy</span>
-              </div>
+          <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-6 text-sm text-slate-500 shadow-inner sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              &copy; {new Date().getFullYear()} Laharighat Premier League. All
+              rights reserved.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-wide">
+              <Link href="/legal/privacy" className="hover:text-slate-900">
+                Privacy
+              </Link>
+              <span>•</span>
+              <Link href="/legal/terms" className="hover:text-slate-900">
+                Terms
+              </Link>
+              <span>•</span>
+              <Link href="/legal/cookies" className="hover:text-slate-900">
+                Cookies
+              </Link>
+              <span className="hidden sm:inline">•</span>
+              <span className="text-slate-400">Alterera Networks</span>
             </div>
           </div>
         </div>
