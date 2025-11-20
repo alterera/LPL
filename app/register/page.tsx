@@ -73,17 +73,11 @@ export default function RegisterPage() {
   });
 
   useEffect(() => {
-    // Check if user is authenticated first
-    const checkAuth = async () => {
+    // Check if user is already registered as a player
+    // Note: Authentication is handled by middleware, so if user reaches this page, they are authenticated
+    const checkPlayerStatus = async () => {
       try {
-        const authResponse = await fetch('/api/auth/me');
-        if (!authResponse.ok) {
-          // User not authenticated, redirect to login
-          router.push('/login?redirect=/register');
-          return;
-        }
-
-        // User is authenticated, check if already registered
+        // Check if already registered as player
         const playerResponse = await fetch('/api/players/me');
         if (playerResponse.ok) {
           const data = await playerResponse.json();
@@ -95,15 +89,18 @@ export default function RegisterPage() {
             });
           }
         }
+        // If playerResponse is not ok, user is not registered yet, which is fine
+        // They can proceed with registration
       } catch (error) {
-        // Error checking auth, redirect to login
-        router.push('/login?redirect=/register');
+        // Error checking player status, but don't redirect
+        // User is authenticated (middleware ensures this), so allow them to register
+        console.error('Error checking player status:', error);
       } finally {
         setCheckingStatus(false);
       }
     };
-    checkAuth();
-  }, [router]);
+    checkPlayerStatus();
+  }, []);
 
   const updateFormData = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
