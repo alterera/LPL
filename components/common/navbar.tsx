@@ -73,12 +73,6 @@ const Navbar = () => {
     }
   };
 
-  const handleRegisterClick = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      router.push('/login?redirect=/register');
-    }
-  };
 
   return (
     <nav className="fixed top-6 inset-x-4 h-16 bg-background border max-w-6xl mx-auto rounded-full z-50">
@@ -152,17 +146,16 @@ const Navbar = () => {
             <>
               <Button
                 variant="outline"
-                className="hidden sm:inline-flex rounded-full"
-                onClick={() => router.push('/login')}
-              >
-                Sign In
-              </Button>
-              <Button
-                className="rounded-full"
-                onClick={handleRegisterClick}
+                className="rounded-full bg-[#CD0D08] text-white"
                 asChild
               >
-                <Link href="/register">Get Started</Link>
+                <Link href="/login">Log In</Link>
+              </Button>
+              <Button
+                className="hidden sm:inline-flex rounded-full"
+                asChild
+              >
+                <Link href="/signup">Signup</Link>
               </Button>
 
               <div className="md:hidden">

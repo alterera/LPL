@@ -10,6 +10,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const primaryLinks = [
   { name: "Home", href: "/" },
@@ -55,144 +56,170 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="text-slate-900">
-      <div className="">
-        <div className="bg-linear-to-br from-[#FCF8F1] via-white to-[#FFE8C7]/80 p-10 shadow-lg shadow-amber-100/50">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="space-y-6">
-              <Link href="/" className="inline-flex items-center gap-3">
-                <Image
-                  src="/logo.png"
-                  alt="Laharighat Premier League"
-                  width={56}
-                  height={56}
-                  className="rounded-2xl bg-white p-2 shadow"
-                />
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-amber-600">
-                    LPL 2025
-                  </p>
-                  <h3 className="text-xl font-semibold">
-                    Laharighat Premier League
-                  </h3>
-                </div>
-              </Link>
-              <p className="text-base text-slate-600">
-                A modern tournament experience for Assam’s cricket community.
-                Register teams, follow fixtures, and celebrate every match with
-    dedicated coverage.
+    <footer className="relative overflow-hidden bg-slate-950 text-slate-100">
+      <div className="absolute inset-0">
+        <div className="absolute -top-32 -right-10 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl" />
+        <div className="absolute -bottom-32 -left-10 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl py-16 px-4 md:px-0">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="space-y-8">
+            <Link href="/" className="inline-flex items-center gap-4">
+              <Image
+                src="/logo.png"
+                alt="Laharighat Premier League"
+                width={56}
+                height={56}
+                className="rounded-2xl bg-white p-2 shadow-lg shadow-amber-200/20"
+              />
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-amber-400">
+                  LPL 2025
+                </p>
+                <h3 className="text-xl font-semibold text-white">
+                  Laharighat Premier League
+                </h3>
+              </div>
+            </Link>
+            <p className="text-base text-slate-300">
+              A modern tournament experience for Assam’s cricket community.
+              Register teams, track fixtures, and relive the best moments with studio-grade coverage.
+            </p>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
+                Stay updated
               </p>
-              <div className="flex flex-wrap gap-3">
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
+              <p className="mt-2 text-slate-200">
+                Get fixtures, ticket windows, and behind-the-scenes stories straight to your inbox.
+              </p>
+              <form className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full rounded-full border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-amber-300 focus:outline-none"
+                />
+                <Button className="rounded-full bg-amber-400 px-6 font-semibold text-slate-900 hover:bg-amber-300">
+                  Subscribe
+                </Button>
+              </form>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:border-amber-300 hover:text-amber-300"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="grid gap-10 sm:grid-cols-2">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">
+                Navigate
+              </p>
+              <ul className="mt-5 space-y-3 text-sm text-slate-300">
+                {primaryLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="flex items-center gap-2 rounded-full py-1 transition hover:text-white"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-amber-400" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">
+                Support
+              </p>
+              <ul className="mt-5 space-y-3 text-sm text-slate-300">
+                {supportLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="flex items-center gap-2 rounded-full py-1 transition hover:text-white"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-amber-400" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="sm:col-span-2">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">
+                Visit us
+              </p>
+              <div className="mt-5 space-y-4">
+                {contactDetails.map((contact) => {
+                  const Icon = contact.icon;
                   return (
                     <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-amber-300 hover:text-amber-600"
+                      key={contact.type}
+                      href={contact.href}
+                      target={contact.type === "Address" ? "_blank" : undefined}
+                      rel={
+                        contact.type === "Address"
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
+                      className="flex items-start gap-3 text-sm text-slate-300 transition hover:border-amber-300 hover:text-white"
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="mt-1 h-4 w-4 text-amber-300" />
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                          {contact.type}
+                        </p>
+                        <p className="mt-1 font-semibold text-white">
+                          {contact.value}
+                        </p>
+                      </div>
                     </a>
                   );
                 })}
               </div>
             </div>
-
-            <div className="grid gap-8 sm:grid-cols-2">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
-                  Navigate
-                </p>
-                <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                  {primaryLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        className="flex items-center gap-2 hover:text-slate-900"
-                      >
-                        <span className="h-1 w-1 rounded-full bg-amber-500" />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
-                  Support
-                </p>
-                <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                  {supportLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        className="flex items-center gap-2 hover:text-slate-900"
-                      >
-                        <span className="h-1 w-1 rounded-full bg-amber-500" />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="sm:col-span-2">
-                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
-                  Contact
-                </p>
-                <div className="mt-4 space-y-4">
-                  {contactDetails.map((contact) => {
-                    const Icon = contact.icon;
-                    return (
-                      <a
-                        key={contact.type}
-                        href={contact.href}
-                        target={contact.type === "Address" ? "_blank" : undefined}
-                        rel={
-                          contact.type === "Address"
-                            ? "noopener noreferrer"
-                            : undefined
-                        }
-                        className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/70 p-4 text-sm text-slate-600 shadow-sm transition hover:border-amber-200"
-                      >
-                        <Icon className="mt-1 h-4 w-4 text-amber-600" />
-                        <div>
-                          <p className="text-xs uppercase tracking-wide text-slate-400">
-                            {contact.type}
-                          </p>
-                          <p className="mt-1 font-medium text-slate-900">
-                            {contact.value}
-                          </p>
-                        </div>
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-6 text-sm text-slate-500 shadow-inner sm:flex-row sm:items-center sm:justify-between">
-            <p>
-              &copy; {new Date().getFullYear()} Laharighat Premier League. All
-              rights reserved.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-wide">
-              <Link href="/legal/privacy" className="hover:text-slate-900">
-                Privacy
+        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
+          <p>&copy; {new Date().getFullYear()} Laharighat Premier League. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-wide">
+            <Link href="/legal/privacy" className="transition hover:text-white">
+              Privacy
+            </Link>
+            <span>•</span>
+            <Link href="/legal/terms" className="transition hover:text-white">
+              Terms
+            </Link>
+            <span>•</span>
+            <Link href="/legal/cookies" className="transition hover:text-white">
+              Cookies
+            </Link>
+            <span className="hidden sm:inline">•</span>
+            <span className="text-slate-500">
+              Built by{" "}
+              <Link href="https://alterera.net" className="hover:text-white" target="_blank" rel="noopener noreferrer">
+                Alterera Networks
               </Link>
-              <span>•</span>
-              <Link href="/legal/terms" className="hover:text-slate-900">
-                Terms
-              </Link>
-              <span>•</span>
-              <Link href="/legal/cookies" className="hover:text-slate-900">
-                Cookies
-              </Link>
-              <span className="hidden sm:inline">•</span>
-              <span className="text-slate-400">Alterera Networks</span>
-            </div>
+            </span>
           </div>
         </div>
       </div>

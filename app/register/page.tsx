@@ -13,6 +13,14 @@ import ImageUpload from '@/components/ui/image-upload';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { CalendarIcon, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 const GP_OPTIONS = ['Bhuragaon', 'Balidunga', 'Laharighat'];
 
@@ -33,10 +41,20 @@ interface FormData {
   emergencyPhone: string;
 }
 
+interface ExistingPlayerData {
+  playerName: string;
+  registrationDate?: string;
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [existingPlayer, setExistingPlayer] = useState<ExistingPlayerData | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsDialogOpen, setTermsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     playerPhoto: '',
     playerName: '',
@@ -70,12 +88,18 @@ export default function RegisterPage() {
         if (playerResponse.ok) {
           const data = await playerResponse.json();
           if (data.player) {
-            router.push('/dashboard');
+            setIsRegistered(true);
+            setExistingPlayer({
+              playerName: data.player.playerName,
+              registrationDate: data.player.registrationDate,
+            });
           }
         }
       } catch (error) {
         // Error checking auth, redirect to login
         router.push('/login?redirect=/register');
+      } finally {
+        setCheckingStatus(false);
       }
     };
     checkAuth();
@@ -457,14 +481,171 @@ export default function RegisterPage() {
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">₹100</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">Registration Fee</p>
             </div>
+            
+            {/* Terms and Conditions */}
+            <div className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+              <input
+                type="checkbox"
+                id="terms-checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="terms-checkbox" className="text-sm text-left text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
+                I accept the{' '}
+                <Dialog open={termsDialogOpen} onOpenChange={setTermsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <button
+                      type="button"
+                      className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setTermsDialogOpen(true);
+                      }}
+                    >
+                      Terms and Conditions
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+                    <DialogHeader>
+                      <DialogTitle>Terms and Conditions</DialogTitle>
+                      <DialogDescription>
+                        Please read the following terms and conditions carefully before proceeding with payment.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex-1 overflow-y-auto pr-2 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+                      <div className="space-y-4">
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">1. Registration and Eligibility</h3>
+                          <p className="mb-2">
+                            By registering for the Laharighat Premier League (LPL), you confirm that:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>You are at least 16 years of age or have parental consent</li>
+                            <li>All information provided during registration is accurate and truthful</li>
+                            <li>You meet the eligibility criteria as specified by the tournament organizers</li>
+                            <li>You have the necessary medical clearance to participate in cricket activities</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">2. Payment and Refund Policy</h3>
+                          <p className="mb-2">
+                            The registration fee of ₹100 is non-refundable under the following circumstances:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Once payment is processed, no refunds will be issued</li>
+                            <li>Refunds may only be considered in case of tournament cancellation by organizers</li>
+                            <li>Any disputes regarding payments must be raised within 7 days of transaction</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">3. Code of Conduct</h3>
+                          <p className="mb-2">
+                            All participants are expected to:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Maintain sportsmanlike behavior on and off the field</li>
+                            <li>Respect fellow players, officials, and spectators</li>
+                            <li>Follow all tournament rules and regulations</li>
+                            <li>Abstain from any form of misconduct, including but not limited to verbal abuse, physical altercations, or cheating</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">4. Liability and Risk</h3>
+                          <p className="mb-2">
+                            Participation in the Laharighat Premier League involves inherent risks. By registering, you acknowledge that:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>You participate at your own risk</li>
+                            <li>The organizers are not liable for any injuries, damages, or losses incurred during the tournament</li>
+                            <li>You are responsible for your own medical insurance and coverage</li>
+                            <li>You will not hold the organizers responsible for any accidents or incidents</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">5. Data Privacy</h3>
+                          <p className="mb-2">
+                            Your personal information will be:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Used solely for tournament administration and communication</li>
+                            <li>Protected in accordance with applicable data protection laws</li>
+                            <li>Not shared with third parties without your explicit consent</li>
+                            <li>Retained for tournament records and future communications</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">6. Tournament Rules</h3>
+                          <p className="mb-2">
+                            All participants must comply with:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Official tournament rules and regulations</li>
+                            <li>Match schedules and timing requirements</li>
+                            <li>Equipment and uniform standards</li>
+                            <li>Decisions made by tournament officials and umpires</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">7. Disqualification</h3>
+                          <p className="mb-2">
+                            The organizers reserve the right to disqualify any participant who:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Violates the code of conduct</li>
+                            <li>Provides false information during registration</li>
+                            <li>Engages in unsportsmanlike behavior</li>
+                            <li>Fails to comply with tournament rules and regulations</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">8. Changes and Cancellations</h3>
+                          <p className="mb-2">
+                            The organizers reserve the right to:
+                          </p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Modify tournament schedules, venues, or formats as necessary</li>
+                            <li>Cancel or postpone the tournament due to unforeseen circumstances</li>
+                            <li>Make changes to rules and regulations with prior notice</li>
+                          </ul>
+                        </section>
+
+                        <section>
+                          <h3 className="font-semibold text-base mb-2">9. Acceptance</h3>
+                          <p className="mb-2">
+                            By checking the "I accept the Terms and Conditions" checkbox and proceeding with payment, you acknowledge that you have read, understood, and agree to be bound by all the terms and conditions stated above.
+                          </p>
+                        </section>
+                      </div>
+                    </div>
+                    <div className="flex justify-end pt-4 border-t">
+                      <Button onClick={() => setTermsDialogOpen(false)}>Close</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </label>
+            </div>
+
             <Button
               type="button"
               onClick={handlePayment}
               className="w-full"
-              disabled={loading}
+              disabled={loading || !termsAccepted}
             >
               {loading ? 'Processing Payment...' : 'Pay Now'}
             </Button>
+            {!termsAccepted && (
+              <p className="text-xs text-red-500 dark:text-red-400">
+                Please accept the Terms and Conditions to proceed with payment
+              </p>
+            )}
           </div>
         );
 
@@ -473,6 +654,54 @@ export default function RegisterPage() {
     }
   };
 
+  if (checkingStatus) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto" />
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Checking registration status...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isRegistered) {
+    return (
+      <div className="px-4 py-12 pt-40 bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-2xl mx-auto">
+          <Card className="border border-amber-200 bg-white/80 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold text-center">Player Already Registered</CardTitle>
+              <CardDescription className="text-center">
+                {existingPlayer?.playerName
+                  ? `${existingPlayer.playerName}, you have already completed your player registration.`
+                  : 'You have already completed your player registration.'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {existingPlayer?.registrationDate && (
+                <div className="rounded-2xl bg-amber-50 border border-amber-100 px-4 py-3 text-center text-sm text-amber-700">
+                  Registered on {format(new Date(existingPlayer.registrationDate), 'PPP')}
+                </div>
+              )}
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                You can view your registration details and payment status from your dashboard.
+              </p>
+              <div className="flex justify-center">
+                <Button
+                  className="rounded-full px-6"
+                  onClick={() => router.push('/dashboard')}
+                >
+                  View registration details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-[80vh] px-4 py-12 pt-30">
       <div className="max-w-3xl mx-auto">
@@ -480,13 +709,13 @@ export default function RegisterPage() {
           <CardHeader>
             <CardTitle className="text-2xl text-center">Player Registration</CardTitle>
             <CardDescription className="text-center">
-              Step {currentStep} of 4
+              Step {currentStep} of 5
             </CardDescription>
             {/* Progress Bar */}
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-4">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / 4) * 100}%` }}
+                style={{ width: `${(currentStep / 5) * 100}%` }}
               />
             </div>
           </CardHeader>

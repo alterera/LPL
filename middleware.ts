@@ -65,7 +65,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  console.log('✅ Middleware passed, allowing request');
+  // console.log('✅ Middleware passed, allowing request');
   return NextResponse.next();
 }
 

@@ -9,6 +9,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Menu } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { NavMenu } from "@/components/nav-menu";
+import Image from "next/image";
 
 interface UserData {
   id: string;
@@ -34,7 +35,7 @@ export const NavigationSheet = ({ user }: NavigationSheetProps) => {
         </Button>
       </SheetTrigger>
       <SheetContent className="px-6 py-3">
-        <Logo />
+        <Image src={'/logo.png'} height={50} width={50} alt="logo" />
         <NavMenu orientation="vertical" className="mt-6 [&>div]:h-full" user={user} />
       </SheetContent>
     </Sheet>

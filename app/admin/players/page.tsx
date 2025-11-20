@@ -63,8 +63,8 @@ export default function AdminPlayersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-12">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-[80vh] bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-12 pt-30">
+      <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/dashboard">

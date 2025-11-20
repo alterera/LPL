@@ -28,7 +28,7 @@ export const NavMenu = ({ user, ...props }: NavMenuProps) => {
   const handleRegisterClick = (e: React.MouseEvent) => {
     if (!user) {
       e.preventDefault();
-      router.push('/login?redirect=/register');
+      router.push('/register');
     }
   };
 
@@ -61,13 +61,13 @@ export const NavMenu = ({ user, ...props }: NavMenuProps) => {
           </NavigationMenuLink>
         </NavigationMenuItem>
         
-        {user && (
+        {/* {user && (
           <NavigationMenuItem>
             <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
               <Link href="/dashboard">Dashboard</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
-        )}
+        )} */}
       </NavigationMenuList>
     </NavigationMenu>
   );
