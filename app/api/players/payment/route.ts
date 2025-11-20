@@ -58,8 +58,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate dummy transaction ID
+    // Generate transaction ID and client transaction ID
     const transactionId = `TXN${Date.now()}${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+    const clientTxnId = `LPL${Date.now()}${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
     const paymentDate = new Date();
     const amount = 100;
 
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
       amount,
       paymentStatus: 'completed',
       transactionId,
+      clientTxnId, // Required field for payment tracking
     });
 
     return NextResponse.json(
