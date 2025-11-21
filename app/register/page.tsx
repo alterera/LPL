@@ -22,7 +22,36 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-const GP_OPTIONS = ['Bhuragaon', 'Balidunga', 'Laharighat', 'Doloigaon', 'Dewaguri', 'Hahchara', 'Tengaguri', 'Baralimari', 'Barchalla', 'Boalguri', 'Bordooba Toop', 'Dhupguri', 'Dhumkura', 'Jaribor', 'Kacharibori', 'Kathani', 'Kustali', 'Laobhurung', 'Nagabandha', 'Niz Gerua', 'Niz Saharia', '	Pavakat', 'Raja Gadhowa', 'Tinsukia Mohmari', '	Tulsibori'];
+const GP_OPTIONS = [
+  'Bhuragaon',
+  'Balidunga',
+  'Laharighat',
+  'Doloigaon',
+  'Dewaguri',
+  'Hahchara',
+  'Tengaguri',
+  'Baralimari',
+  'Barchalla',
+  'Boalguri',
+  'Bordooba Toop',
+  'Dhupguri',
+  'Dhumkura',
+  'Dighalburi',
+  'Jaribor',
+  'Kacharibori',
+  'Kathani',
+  'Kustali',
+  'Laobhurung',
+  'Nagabandha',
+  'Niz Gerua',
+  'Niz Saharia',
+  'Pavakat',
+  'Raja Gadhowa',
+  'Tinsukia Mohmari',
+  'Tulsibori',
+]
+  .map((gp) => gp.trim()) // Remove any leading/trailing whitespace
+  .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
 
 interface FormData {
   playerPhoto: string;
