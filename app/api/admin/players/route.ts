@@ -45,6 +45,8 @@ export async function GET(request: NextRequest) {
       players: players.map(player => ({
         id: player._id?.toString(),
         playerName: player.playerName,
+        playerPhoto: player.playerPhoto,
+        aadharNumber: player.aadharNumber,
         contactNumber: player.contactNumber,
         registrationDate: player.registrationDate,
         paymentStatus: player.paymentStatus,

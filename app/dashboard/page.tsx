@@ -37,6 +37,7 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const [player, setPlayer] = useState<PlayerData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [retryingPayment, setRetryingPayment] = useState(false);
 
   const fetchPlayerData = async () => {
     try {
@@ -79,6 +80,34 @@ function DashboardContent() {
       }
     }
   }, [searchParams]);
+
+  const handleRetryPayment = async () => {
+    if (!player) return;
+
+    setRetryingPayment(true);
+    try {
+      const response = await fetch('/api/payments/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success && data.payment?.paymentUrl) {
+        // Redirect to payment URL
+        window.location.href = data.payment.paymentUrl;
+      } else {
+        toast.error(data.error || 'Failed to create payment order. Please try again.');
+        setRetryingPayment(false);
+      }
+    } catch (error) {
+      console.error('Retry payment error:', error);
+      toast.error('An error occurred. Please try again.');
+      setRetryingPayment(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -154,11 +183,18 @@ function DashboardContent() {
               ) : (
                 <>
                   <XCircle className="w-8 h-8 text-yellow-500" />
-                  <div>
+                  <div className="flex-1">
                     <p className="font-semibold text-yellow-600 dark:text-yellow-400">Payment Pending</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       Please complete the payment to finalize your registration.
                     </p>
+                    <Button
+                      onClick={handleRetryPayment}
+                      disabled={retryingPayment}
+                      className="mt-2"
+                    >
+                      {retryingPayment ? 'Processing...' : 'Retry Payment'}
+                    </Button>
                   </div>
                 </>
               )}
