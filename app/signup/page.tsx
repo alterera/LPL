@@ -58,7 +58,10 @@ export default function SignupPage() {
 
       if (response.ok) {
         toast.success('Account created successfully!');
-        router.push('/dashboard');
+        // Dispatch event to update navbar immediately
+        window.dispatchEvent(new Event('auth-change'));
+        // Use hard refresh to ensure cookie is properly loaded
+        window.location.href = '/dashboard';
       } else {
         toast.error(data.error || 'Signup failed');
       }

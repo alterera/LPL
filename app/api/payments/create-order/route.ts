@@ -6,7 +6,7 @@ import { UserModel } from '@/lib/models/User';
 import { ObjectId } from 'mongodb';
 
 const PAYMENT_GATEWAY_API_URL = 'https://api.ekqr.in/api/create_order';
-const REGISTRATION_FEE = 100;
+const REGISTRATION_FEE = 1;
 
 export async function POST(request: NextRequest) {
   try {
