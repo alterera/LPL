@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-const GP_OPTIONS = ['Bhuragaon', 'Balidunga', 'Laharighat', 'Doloigaon', 'Dewaguri', 'Kushtoli', 'Gerua', 'Hahchara', 'Tengaguri'];
+const GP_OPTIONS = ['Bhuragaon', 'Balidunga', 'Laharighat', 'Doloigaon', 'Dewaguri', 'Hahchara', 'Tengaguri', 'Baralimari', 'Barchalla', 'Boalguri', 'Bordooba Toop', 'Dhupguri', 'Dhumkura', 'Jaribor', 'Kacharibori', 'Kathani', 'Kustali', 'Laobhurung', 'Nagabandha', 'Niz Gerua', 'Niz Saharia', '	Pavakat', 'Raja Gadhowa', 'Tinsukia Mohmari', '	Tulsibori'];
 
 interface FormData {
   playerPhoto: string;
