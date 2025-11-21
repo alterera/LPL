@@ -259,6 +259,9 @@ export default function RegisterPage() {
                     selected={formData.dateOfBirth || undefined}
                     onSelect={(date) => updateFormData('dateOfBirth', date)}
                     disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                    captionLayout="dropdown"
+                    fromYear={1947}
+                    toYear={new Date().getFullYear()}
                     initialFocus
                   />
                 </PopoverContent>

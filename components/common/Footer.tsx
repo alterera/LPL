@@ -35,14 +35,14 @@ const contactDetails = [
   },
   {
     type: "Phone",
-    value: "+91 91017 95134",
-    href: "tel:+919101795134",
+    value: "+91 70022 97426",
+    href: "tel:+9170022 97426",
     icon: Phone,
   },
   {
     type: "Address",
-    value: "Block Stadium, Laharighat, Assam 782127",
-    href: "https://maps.google.com/?q=Laharighat+Block+Stadium",
+    value: "Laharighat Block Cricket Field, Morigaon, Assam 782127",
+    href: "https://maps.google.com/?q=Laharighat+Block",
     icon: MapPin,
   },
 ];
