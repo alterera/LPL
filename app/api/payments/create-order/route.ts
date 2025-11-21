@@ -6,7 +6,7 @@ import { UserModel } from '@/lib/models/User';
 import { ObjectId } from 'mongodb';
 
 const PAYMENT_GATEWAY_API_URL = 'https://api.ekqr.in/api/create_order';
-const REGISTRATION_FEE = 100;
+const REGISTRATION_FEE = 1;
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       amount: REGISTRATION_FEE.toString(),
       p_info: 'Laharighat Premier League - Player Registration',
       customer_name: player.playerName,
-      customer_email: `${user.phone}@laharighatpl.com`, // Using phone as email since User model doesn't have email
+      customer_email: `${user.phone}@laharighatpl.in`, // Using phone as email since User model doesn't have email
       customer_mobile: player.contactNumber,
       redirect_url: redirectUrl,
       udf1: player._id?.toString() || '', // Store player ID in UDF1
