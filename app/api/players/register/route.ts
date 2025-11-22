@@ -49,6 +49,9 @@ export async function POST(request: NextRequest) {
       parentContact,
       emergencyContactName,
       emergencyPhone,
+      bowlingStyle,
+      battingStyle,
+      primaryRole,
     } = body;
 
     // Validation
@@ -66,12 +69,56 @@ export async function POST(request: NextRequest) {
       !parentName ||
       !parentContact ||
       !emergencyContactName ||
-      !emergencyPhone
+      !emergencyPhone ||
+      !primaryRole ||
+      typeof primaryRole !== 'string'
     ) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'All required fields must be provided' },
         { status: 400 }
       );
+    }
+
+    // Validate bowling and batting styles based on primary role
+    const isAllRounder = primaryRole === 'All Rounder';
+    const isBowler = primaryRole === 'Bowler';
+    const isBatsman = primaryRole === 'Batsman';
+    const isWicketKeeper = primaryRole === 'Wicket Keeper';
+
+    // Validate bowling style
+    if (isAllRounder || isBowler) {
+      if (!bowlingStyle || !Array.isArray(bowlingStyle) || bowlingStyle.length === 0) {
+        return NextResponse.json(
+          { error: 'Bowling style is required for All Rounder and Bowler roles' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Validate batting style
+    if (isAllRounder || isBatsman) {
+      if (!battingStyle || !Array.isArray(battingStyle) || battingStyle.length === 0) {
+        return NextResponse.json(
+          { error: 'Batting style is required for All Rounder and Batsman roles' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // For wicket keeper, bowling and batting styles are optional, but if provided should be arrays
+    if (isWicketKeeper) {
+      if (bowlingStyle && !Array.isArray(bowlingStyle)) {
+        return NextResponse.json(
+          { error: 'Bowling style must be an array' },
+          { status: 400 }
+        );
+      }
+      if (battingStyle && !Array.isArray(battingStyle)) {
+        return NextResponse.json(
+          { error: 'Batting style must be an array' },
+          { status: 400 }
+        );
+      }
     }
 
     // Create player
@@ -91,6 +138,9 @@ export async function POST(request: NextRequest) {
       parentContact,
       emergencyContactName,
       emergencyPhone,
+      bowlingStyle: bowlingStyle || [],
+      battingStyle: battingStyle || [],
+      primaryRole,
     });
 
     return NextResponse.json(

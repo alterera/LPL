@@ -18,6 +18,9 @@ export interface Player {
   parentContact: string;
   emergencyContactName: string;
   emergencyPhone: string;
+  bowlingStyle: string[];
+  battingStyle: string[];
+  primaryRole: string;
   registrationDate: Date;
   paymentStatus: 'pending' | 'completed';
   paymentDate?: Date;

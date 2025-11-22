@@ -50,8 +50,29 @@ const GP_OPTIONS = [
   'Tinsukia Mohmari',
   'Tulsibori',
 ]
-  .map((gp) => gp.trim()) // Remove any leading/trailing whitespace
+  .map((gp) => gp.trim())
   .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+const BOWLING_STYLES = [
+  'Right Arm Fast',
+  'Right Arm Medium',
+  'Right Arm Spin',
+  'Left Arm Fast',
+  'Left Arm Medium',
+  'Left Arm Spin',
+];
+
+const BATTING_STYLES = [
+  'Left Hand Batsman',
+  'Right Hand Batsman',
+];
+
+const PRIMARY_ROLES = [
+  'Batsman',
+  'Bowler',
+  'All Rounder',
+  'Wicket Keeper',
+];
 
 interface FormData {
   playerPhoto: string;
@@ -68,6 +89,9 @@ interface FormData {
   parentContact: string;
   emergencyContactName: string;
   emergencyPhone: string;
+  bowlingStyle: string[];
+  battingStyle: string[];
+  primaryRole: string;
 }
 
 interface ExistingPlayerData {
@@ -99,6 +123,9 @@ export default function RegisterPage() {
     parentContact: '',
     emergencyContactName: '',
     emergencyPhone: '',
+    bowlingStyle: [],
+    battingStyle: [],
+    primaryRole: '',
   });
 
   useEffect(() => {
@@ -155,6 +182,44 @@ export default function RegisterPage() {
           return false;
         }
         return true;
+      case 4:
+        // Primary Role is always mandatory
+        if (!formData.primaryRole) {
+          toast.error('Please select a Primary Role');
+          return false;
+        }
+
+        // Determine which fields are mandatory based on primary role
+        const isAllRounder = formData.primaryRole === 'All Rounder';
+        const isBowler = formData.primaryRole === 'Bowler';
+        const isBatsman = formData.primaryRole === 'Batsman';
+        const isWicketKeeper = formData.primaryRole === 'Wicket Keeper';
+
+        // If Wicket Keeper is selected, bowling and batting are optional
+        if (isWicketKeeper) {
+          return true;
+        }
+
+        // If All Rounder is selected, both are mandatory
+        if (isAllRounder) {
+          if (formData.bowlingStyle.length === 0 || formData.battingStyle.length === 0) {
+            toast.error('All Rounder requires both Bowling Style and Batting Style');
+            return false;
+          }
+        } else {
+          // If Bowler is selected, bowling style is mandatory
+          if (isBowler && formData.bowlingStyle.length === 0) {
+            toast.error('Bowler requires Bowling Style');
+            return false;
+          }
+          // If Batsman is selected, batting style is mandatory
+          if (isBatsman && formData.battingStyle.length === 0) {
+            toast.error('Batsman requires Batting Style');
+            return false;
+          }
+        }
+
+        return true;
       default:
         return true;
     }
@@ -162,7 +227,7 @@ export default function RegisterPage() {
 
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, 5));
     }
   };
 
@@ -171,7 +236,7 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3) || !validateStep(4)) {
       toast.error('Please complete all steps');
       return;
     }
@@ -191,7 +256,7 @@ export default function RegisterPage() {
 
       if (response.ok) {
         toast.success('Registration successful! Please proceed to payment.');
-        setCurrentStep(5); // Move to payment step
+        setCurrentStep(6); // Move to payment step
       } else {
         toast.error(data.error || 'Registration failed');
       }
@@ -422,6 +487,117 @@ export default function RegisterPage() {
         );
 
       case 4:
+        // Determine which fields are mandatory based on primary role
+        const isAllRounder = formData.primaryRole === 'All Rounder';
+        const isBowler = formData.primaryRole === 'Bowler';
+        const isBatsman = formData.primaryRole === 'Batsman';
+        const isWicketKeeper = formData.primaryRole === 'Wicket Keeper';
+        
+        const isBowlingRequired = isAllRounder || isBowler;
+        const isBattingRequired = isAllRounder || isBatsman;
+
+        return (
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold mb-4">Player Attributes</h3>
+            <div className="space-y-6">
+              {/* Primary Role - Always First and Mandatory (Single Select) */}
+              <div className="space-y-3">
+                <Label className="text-base font-medium">Primary Role in Team *</Label>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Select your primary role</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {PRIMARY_ROLES.map((role) => (
+                    <div key={role} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id={`role-${role}`}
+                        name="primaryRole"
+                        value={role}
+                        checked={formData.primaryRole === role}
+                        onChange={(e) => {
+                          updateFormData('primaryRole', e.target.value);
+                        }}
+                        className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor={`role-${role}`} className="text-sm font-normal cursor-pointer">
+                        {role}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bowling Style - Conditional */}
+              <div className="space-y-3">
+                <Label className="text-base font-medium">
+                  Bowling Style {isBowlingRequired && !isWicketKeeper ? '*' : ''}
+                </Label>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isBowlingRequired && !isWicketKeeper 
+                    ? 'Required for All Rounder and Bowler roles' 
+                    : 'Select all that apply'}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {BOWLING_STYLES.map((style) => (
+                    <div key={style} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`bowling-${style}`}
+                        checked={formData.bowlingStyle.includes(style)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            updateFormData('bowlingStyle', [...formData.bowlingStyle, style]);
+                          } else {
+                            updateFormData('bowlingStyle', formData.bowlingStyle.filter((s) => s !== style));
+                          }
+                        }}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor={`bowling-${style}`} className="text-sm font-normal cursor-pointer">
+                        {style}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Batting Style - Conditional */}
+              <div className="space-y-3">
+                <Label className="text-base font-medium">
+                  Batting Style {isBattingRequired && !isWicketKeeper ? '*' : ''}
+                </Label>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isBattingRequired && !isWicketKeeper 
+                    ? 'Required for All Rounder and Batsman roles' 
+                    : 'Select all that apply'}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {BATTING_STYLES.map((style) => (
+                    <div key={style} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`batting-${style}`}
+                        checked={formData.battingStyle.includes(style)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            updateFormData('battingStyle', [...formData.battingStyle, style]);
+                          } else {
+                            updateFormData('battingStyle', formData.battingStyle.filter((s) => s !== style));
+                          }
+                        }}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor={`batting-${style}`} className="text-sm font-normal cursor-pointer">
+                        {style}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 5:
         return (
           <div className="space-y-6">
             <h3 className="text-lg font-semibold mb-4">Review Your Information</h3>
@@ -484,6 +660,18 @@ export default function RegisterPage() {
                 <Label className="text-sm text-gray-500">Emergency Phone</Label>
                 <p className="mt-1">{formData.emergencyPhone}</p>
               </div>
+              <div>
+                <Label className="text-sm text-gray-500">Bowling Style</Label>
+                <p className="mt-1">{formData.bowlingStyle.length > 0 ? formData.bowlingStyle.join(', ') : 'N/A'}</p>
+              </div>
+              <div>
+                <Label className="text-sm text-gray-500">Batting Style</Label>
+                <p className="mt-1">{formData.battingStyle.length > 0 ? formData.battingStyle.join(', ') : 'N/A'}</p>
+              </div>
+              <div>
+                <Label className="text-sm text-gray-500">Primary Role</Label>
+                <p className="mt-1">{formData.primaryRole || 'N/A'}</p>
+              </div>
             </div>
             <Button
               type="button"
@@ -496,7 +684,7 @@ export default function RegisterPage() {
           </div>
         );
 
-      case 5:
+      case 6:
         return (
           <div className="space-y-6 text-center">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto" />
@@ -736,19 +924,19 @@ export default function RegisterPage() {
           <CardHeader>
             <CardTitle className="text-2xl text-center">Player Registration</CardTitle>
             <CardDescription className="text-center">
-              Step {currentStep} of 5
+              Step {currentStep} of 6
             </CardDescription>
             {/* Progress Bar */}
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-4">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / 5) * 100}%` }}
+                style={{ width: `${(currentStep / 6) * 100}%` }}
               />
             </div>
           </CardHeader>
           <CardContent>
             {renderStep()}
-            {currentStep < 4 && (
+            {currentStep < 5 && (
               <div className="flex justify-between mt-6">
                 <Button
                   type="button"
